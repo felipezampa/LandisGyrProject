@@ -45,8 +45,12 @@
   <ItemGroup>
     <Compile Include="Controller\EndpointController.cs" />
     <Compile Include="Controller\IController.cs" />
-    <Compile Include="Exceptions\ConvertMenuException.cs" />
+    <Compile Include="Exceptions\DuplicateSerialNumberException.cs" />
+    <Compile Include="Exceptions\EndpointException.cs" />
+    <Compile Include="Exceptions\EndpointNotFoundException.cs" />
     <Compile Include="Model\EndpointModel.cs" />
+    <Compile Include="Model\Enum\MeterModelId.cs" />
+    <Compile Include="Model\Enum\SwitchState.cs" />
     <Compile Include="Services\EndpointService.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="View\Program.cs" />

@@ -172,16 +172,10 @@ namespace LandisGyrProject.Controller
         {
             // Since a lot of actions are requiring confirmation I decided to create this method so it's easy to check confirmation when needed
             UiViews.AskForConfirmationView();
-            int optionSelected;
-            try
-            {
-                optionSelected = Convert.ToInt32(Console.ReadLine());
-                return optionSelected == 1 ?  true : false;
-            }
-            catch
-            {
-                throw new ConvertMenuException("Please type a correct number");
-            }
+
+            int optionSelected = service.GetValidatedIntInput("Your choice:  ");
+
+            return optionSelected == 1 ?  true : false;
         }
 
         /// <summary>
@@ -190,15 +184,10 @@ namespace LandisGyrProject.Controller
         public int OptionsMenu()
         {
             UiViews.OptionsMenuView();
-            try
-            {
-                int optionSelected = Convert.ToInt32(Console.ReadLine());
-                return optionSelected;
-            }
-            catch
-            {
-                throw new ConvertMenuException("Please type a correct number");
-            }
+
+            int optionSelected = service.GetValidatedIntInput("Your choice:  ");
+
+            return optionSelected;
         }
     }
 }
