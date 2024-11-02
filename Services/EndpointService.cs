@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using LandisGyrProject.Exceptions;
 using LandisGyrProject.Model;
 
 namespace LandisGyrProject.Services
@@ -60,7 +57,7 @@ namespace LandisGyrProject.Services
         {
 
         }
-        public void Delete(string id)
+        public string Delete(string id)
         {
             // Find the endpoint using the serial number
             EndpointModel endpointToDelete = endpoints.FirstOrDefault(e => e.serialNumber == id);
@@ -68,27 +65,20 @@ namespace LandisGyrProject.Services
             if (endpointToDelete == null)
             {
                 Console.WriteLine("Error: No endpoint found with the given serial number.");
-                return;
+                return null;
             }
 
-            // Ask for confirmation
-            Console.WriteLine($"Are you sure you want to delete the endpoint with Serial Number '{id}'? (y/n)");
-            string confirmation = Console.ReadLine();
-            if (confirmation?.ToLower() == "y")
-            {
-                endpoints.Remove(endpointToDelete);
-                Console.WriteLine("Endpoint deleted successfully.");
-            }
-            else
-            {
-                Console.WriteLine("Deletion canceled.");
-            }
+            endpoints.Remove(endpointToDelete);
+            Console.WriteLine("Endpoint deleted successfully.");
 
+
+            return endpointToDelete.serialNumber;
         }
-        //IEnumerable<EndpointModel> Find(Func<EndpointModel, bool> predicate)
-        //{
-        //    return null;
-        //}
+
+        public EndpointModel Find(Func<EndpointModel, bool> predicate)
+        {
+            return endpoints.FirstOrDefault(predicate);
+        }
 
         private int GetValidatedIntInput(string helpText)
         {

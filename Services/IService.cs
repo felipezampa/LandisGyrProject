@@ -11,7 +11,7 @@ namespace LandisGyrProject.Services
         string Create(T item);
         IEnumerable<T> ListAll();
         void Update(string id, T item);
-        void Delete(string id);
-        //IEnumerable<T> Find(Func<T, bool> predicate);
+        string Delete(string id);
+        T Find(Func<T, bool> predicate);
     }
 }

@@ -28,7 +28,7 @@ namespace LandisGyrProject.View
             Console.WriteLine("   2 - Edit an existing endpoint");
             Console.WriteLine("   3 - Delete an existing endpoint");
             Console.WriteLine("   4 - List all endpoint");
-            Console.WriteLine("   5 - Find a endpoint by \"Endpoint\"");
+            Console.WriteLine("   5 - Find a endpoint by \"Endpoint Serial Number\"");
             Console.WriteLine("   6 - Exit");
             Console.WriteLine("---------------------------------------------------");
             Console.Write("Your choice:  ");

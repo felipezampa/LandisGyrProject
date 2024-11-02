@@ -18,7 +18,7 @@ namespace LandisGyrProject.Controller
         public EndpointController() { }
 
         /// <summary>
-        /// Create a new endpoint and then informs if the operation went well
+        ///     Create a new endpoint and then informs if the operation went well
         /// </summary>
         public void Create()
         {
@@ -33,12 +33,12 @@ namespace LandisGyrProject.Controller
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message); // refazer essas exceptions se der tempo
             }
         }
 
         /// <summary>
-        /// Get all of the endpoints and then call the action to print on screen every object
+        ///     Get all of the endpoints and then call the action to print on screen every object
         /// </summary>
         public void ListAll()
         {
@@ -52,6 +52,8 @@ namespace LandisGyrProject.Controller
                 }
                 else
                 {
+                    Console.Clear();
+                    Console.WriteLine("All endpoints:\n");
                     foreach (EndpointModel endpoint in endpoints)
                     {
                         UiTools.PrintEndpointView(endpoint);
@@ -60,7 +62,7 @@ namespace LandisGyrProject.Controller
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message); // refazer essas exceptions se der tempo
             }
         }
 
@@ -68,16 +70,81 @@ namespace LandisGyrProject.Controller
         {
             Console.WriteLine("---> Update an endpoint");
         }
+
+        /// <summary>
+        ///     Delete an endpoint, based on the requirement it should check if exists, then ask for confirmation and finally delete the endpoint
+        /// </summary>
         public void Delete()
         {
             Console.WriteLine("---> Delete an endpoint");
-        }
-        public void Find()
-        {
+
+            try
+            {
+                Console.Write("Enter the Endpoint Serial Number to delete: ");
+                string serialNumber = Console.ReadLine();
+
+                // Search if the endpoint exists
+                EndpointModel endpoint = service.Find(e => e.serialNumber.Equals(serialNumber, StringComparison.OrdinalIgnoreCase));
+
+                if (endpoint == null)
+                {
+                    Console.WriteLine($"No endpoint with the Serial Number: {serialNumber} was found to delete.");
+                    return;
+                }
+
+                // Ask for confirmation before deleting
+                if (AskForConfirmation())
+                {
+                    string response = service.Delete(serialNumber);
+
+                    if (response != null)
+                        UiTools.DataManipulationResponseView(response, "deleted");
+                }
+                else
+                {
+                    Console.WriteLine("Deletion canceled.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message); // refazer essas exceptions se der tempo
+            }
         }
 
+        /// <summary>
+        ///     Search for a specific endpoint
+        /// </summary>
+        public void Find()
+        {
+            try
+            {
+                Console.Write("Enter the Endpoint Serial Number: ");
+                string serialNumber = Console.ReadLine();
+                EndpointModel endpoint = service.Find(e => e.serialNumber.Equals(serialNumber, StringComparison.OrdinalIgnoreCase));
+                if (endpoint == null)
+                {
+                    Console.WriteLine($"No endpoint with the Serial Number: {serialNumber} was found.");
+                    return;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Endpoint founded:\n");
+                    UiTools.PrintEndpointView(endpoint);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message); // refazer essas exceptions se der tempo
+            }
+        }
+
+        /// <summary>
+        ///     Ask for confirmation on a given action
+        /// </summary>
         public bool AskForConfirmation()
         {
+            // Since a lot of actions are requiring confirmation I decided to create this method so it's easy to check confirmation when needed
             UiTools.AskForConfirmationView();
             int optionSelected;
             try
@@ -91,6 +158,9 @@ namespace LandisGyrProject.Controller
             }
         }
 
+        /// <summary>
+        ///     Shows the options and retrieve the selected one
+        /// </summary>
         public int OptionsMenu()
         {
             UiTools.OptionsMenuView();
