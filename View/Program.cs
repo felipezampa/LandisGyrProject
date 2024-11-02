@@ -9,7 +9,7 @@ namespace LandisGyrProject.View
         static void Main(string[] args)
         {
             EndpointController controller = new EndpointController();
-            UiTools.WelcomeMenuView();
+            UiViews.WelcomeMenuView();
             while (true)
             {
                 try

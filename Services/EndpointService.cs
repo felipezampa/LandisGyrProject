@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using LandisGyrProject.Model;
+using LandisGyrProject.View;
 
 namespace LandisGyrProject.Services
 {
@@ -53,14 +54,31 @@ namespace LandisGyrProject.Services
                 return endpoints;
             }
         }
-        public void Update(string id, EndpointModel endpoint)
+        public string Update(string serialNumber, EndpointModel endpoint)
         {
+            int newSwitchState;
+            while (true)
+            {
+                Console.Write($"Enter new Switch State for endpoint: \"{serialNumber}\" (0 for Disconnected, 1 for Connected, 2 for armed): ");
+                string input = Console.ReadLine();
 
+                // Validate input
+                if (int.TryParse(input, out newSwitchState) && (newSwitchState == 0 || newSwitchState == 1 || newSwitchState == 2))
+                {
+                    // Update the switchState in the existing endpoint
+                    endpoint.switchState = newSwitchState;
+                    return $"Endpoint with Serial Number: {serialNumber} was successfully updated.";
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter 0 for Disconnected, 1 for Connected or 2 for armed.");
+                }
+            }
         }
-        public string Delete(string id)
+        public string Delete(string serialNumber)
         {
             // Find the endpoint using the serial number
-            EndpointModel endpointToDelete = endpoints.FirstOrDefault(e => e.serialNumber == id);
+            EndpointModel endpointToDelete = endpoints.FirstOrDefault(e => e.serialNumber == serialNumber);
 
             if (endpointToDelete == null)
             {
@@ -75,9 +93,9 @@ namespace LandisGyrProject.Services
             return endpointToDelete.serialNumber;
         }
 
-        public EndpointModel Find(Func<EndpointModel, bool> predicate)
+        public EndpointModel Find(string serialNumber)
         {
-            return endpoints.FirstOrDefault(predicate);
+            return endpoints.FirstOrDefault(e => e.serialNumber.Equals(serialNumber, StringComparison.OrdinalIgnoreCase));
         }
 
         private int GetValidatedIntInput(string helpText)

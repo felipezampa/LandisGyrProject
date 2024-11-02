@@ -10,7 +10,7 @@ using LandisGyrProject.Model;
 
 namespace LandisGyrProject.View
 {
-    public class UiTools
+    public class UiViews
     {
         public static void WelcomeMenuView()
         {
@@ -36,12 +36,12 @@ namespace LandisGyrProject.View
 
         public static void PrintEndpointView(EndpointModel endpoint)
         {
+            Console.WriteLine("===================================================");
             Console.WriteLine($"Serial Number:          {endpoint.serialNumber}");
             Console.WriteLine($"Meter Model ID:         {endpoint.meterModelId}");
             Console.WriteLine($"Meter Number:           {endpoint.meterNumber}");
             Console.WriteLine($"Meter Firmware Version: {endpoint.meterFirmwareVersion}");
             Console.WriteLine($"Switch State:           {endpoint.switchState}");
-            Console.WriteLine("===================================================");
         }
 
         public static void AskForConfirmationView()
