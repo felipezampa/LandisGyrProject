@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
+using LandisGyrProject.Exceptions;
 using LandisGyrProject.Model;
 using LandisGyrProject.Model.Enum;
 using LandisGyrProject.View;
@@ -21,8 +21,7 @@ namespace LandisGyrProject.Services
                 // Check for duplicate serial number
                 if (endpoints.Any(e => e.SerialNumber == endpoint.SerialNumber))
                 {
-                    Console.WriteLine("Error: An endpoint with this serial number already exists.");
-                    return null;
+                    throw new DuplicateSerialNumberException($"An endpoint with the serial number '{endpoint.SerialNumber}' already exists.");
                 }
 
                 Console.Write("Meter Firmware Version: ");
