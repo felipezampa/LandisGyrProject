@@ -2,7 +2,7 @@
 
 namespace LandisGyrProject.Exceptions
 {
-    public class EndpointNotFoundException : EndpointException
+    public class EndpointNotFoundException : Exception
     {
         public EndpointNotFoundException() { }
         public EndpointNotFoundException(string message): base(message) { }

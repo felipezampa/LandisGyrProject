@@ -2,7 +2,7 @@
 
 namespace LandisGyrProject.Exceptions
 {
-    public class DuplicateSerialNumberException : EndpointException
+    public class DuplicateSerialNumberException : Exception
     {
         public DuplicateSerialNumberException() { }
         public DuplicateSerialNumberException(string message): base(message) { }

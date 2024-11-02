@@ -46,7 +46,6 @@
     <Compile Include="Controller\EndpointController.cs" />
     <Compile Include="Controller\IController.cs" />
     <Compile Include="Exceptions\DuplicateSerialNumberException.cs" />
-    <Compile Include="Exceptions\EndpointException.cs" />
     <Compile Include="Exceptions\EndpointNotFoundException.cs" />
     <Compile Include="Model\EndpointModel.cs" />
     <Compile Include="Model\Enum\MeterModelId.cs" />

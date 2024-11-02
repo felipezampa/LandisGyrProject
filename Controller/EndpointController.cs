@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LandisGyrProject.Exceptions;
 using LandisGyrProject.Model;
 using LandisGyrProject.Services;
 using LandisGyrProject.View;
@@ -13,7 +14,7 @@ namespace LandisGyrProject.Controller
         public EndpointController() { }
 
         /// <summary>
-        ///     Create a new endpoint and then informs if the operation went well
+        /// Create a new endpoint and then informs if the operation went well
         /// </summary>
         public void Create()
         {
@@ -26,14 +27,18 @@ namespace LandisGyrProject.Controller
                 if (response != null)
                     UiViews.DataManipulationResponseView(response, "created");
             }
+            catch (DuplicateSerialNumberException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message); // refazer essas exceptions se der tempo
+                Console.WriteLine("An unexpected error occurred: " + ex.Message);
             }
         }
 
         /// <summary>
-        ///     Get all of the endpoints and then call the action to print on screen every object
+        /// Get all of the endpoints and then call the action to print on screen every object
         /// </summary>
         public void ListAll()
         {
@@ -42,25 +47,28 @@ namespace LandisGyrProject.Controller
             {
                 IEnumerable<EndpointModel> endpoints = service.ListAll();
                 if (endpoints == null || !endpoints.Any())
+                    throw new EndpointNotFoundException("No endpoints found.");
+
+                Console.Clear();
+                Console.WriteLine("All endpoints:\n");
+                foreach (EndpointModel endpoint in endpoints)
                 {
-                    Console.WriteLine("No endpoints found.");
+                    UiViews.PrintEndpointView(endpoint);
                 }
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine("All endpoints:\n");
-                    foreach (EndpointModel endpoint in endpoints)
-                    {
-                        UiViews.PrintEndpointView(endpoint);
-                    }
-                }
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message); // refazer essas exceptions se der tempo
+                Console.WriteLine(ex.Message);
             }
         }
 
+        /// <summary>
+        /// Update an existing endpoint based on its serial number.
+        /// </summary>
         public void Update()
         {
             Console.WriteLine("---> Update an endpoint");
@@ -74,10 +82,7 @@ namespace LandisGyrProject.Controller
                 EndpointModel endpoint = service.Find(serialNumber);
 
                 if (endpoint == null)
-                {
-                    Console.WriteLine($"No endpoint with the Serial Number: \"{serialNumber}\" was found to update.");
-                    return;
-                }
+                    throw new EndpointNotFoundException($"No endpoint with the Serial Number: \"{serialNumber}\" was found to update.");
 
                 Console.WriteLine("Current Endpoint Details:");
                 UiViews.PrintEndpointView(endpoint);
@@ -87,14 +92,18 @@ namespace LandisGyrProject.Controller
                 if (response != null)
                     UiViews.DataManipulationResponseView(response, "updated");
             }
+            catch (EndpointNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message); // refazer essas exceptions se der tempo
+                Console.WriteLine("An unexpected error occurred: " + ex.Message);
             }
         }
 
         /// <summary>
-        ///     Delete an endpoint, based on the requirement it should check if exists, then ask for confirmation and finally delete the endpoint
+        /// Delete an endpoint, based on the requirement it should check if exists, then ask for confirmation and finally delete the endpoint.
         /// </summary>
         public void Delete()
         {
@@ -109,10 +118,7 @@ namespace LandisGyrProject.Controller
                 EndpointModel endpoint = service.Find(serialNumber);
 
                 if (endpoint == null)
-                {
-                    Console.WriteLine($"No endpoint with the Serial Number: \"{serialNumber}\" was found to delete.");
-                    return;
-                }
+                    throw new EndpointNotFoundException($"No endpoint with the Serial Number: \"{serialNumber}\" was found to delete.");
 
                 // Ask for confirmation before deleting
                 if (AskForConfirmation())
@@ -127,14 +133,18 @@ namespace LandisGyrProject.Controller
                     Console.WriteLine("Deletion canceled.");
                 }
             }
+            catch (EndpointNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message); // refazer essas exceptions se der tempo
+                Console.WriteLine("An unexpected error occurred: " + ex.Message);
             }
         }
 
         /// <summary>
-        ///     Search for a specific endpoint
+        /// Search for a specific endpoint
         /// </summary>
         public void Find()
         {
@@ -144,20 +154,19 @@ namespace LandisGyrProject.Controller
                 string serialNumber = Console.ReadLine();
                 EndpointModel endpoint = service.Find(serialNumber);
                 if (endpoint == null)
-                {
-                    Console.WriteLine($"No endpoint with the Serial Number: {serialNumber} was found.");
-                    return;
-                }
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine("Endpoint founded:\n");
-                    UiViews.PrintEndpointView(endpoint);
-                }
+                    throw new EndpointNotFoundException($"No endpoint with the Serial Number: {serialNumber} was found.");
+
+                Console.Clear();
+                Console.WriteLine("Endpoint founded:\n");
+                UiViews.PrintEndpointView(endpoint);
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message); // refazer essas exceptions se der tempo
+                Console.WriteLine("An unexpected error occurred: " + ex.Message);
             }
         }
 
@@ -171,7 +180,7 @@ namespace LandisGyrProject.Controller
 
             int optionSelected = service.GetValidatedIntInput("Your choice:  ");
 
-            return optionSelected == 1 ?  true : false;
+            return optionSelected == 1 ? true : false;
         }
 
         /// <summary>
